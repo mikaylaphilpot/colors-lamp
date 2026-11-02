@@ -1,0 +1,144 @@
+@startuml COLORS_Application_Class_Diagram
+left to right direction
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+
+skinparam package {
+  BackgroundColor #FFFFFF
+  BorderColor #343A40
+}
+skinparam class {
+  BackgroundColor #F8F9FA
+  BorderColor #343A40
+  ArrowColor #343A40
+}
+
+title COLORS Application Class Diagram
+
+package "Browser Presentation" {
+  class LoginPage {
+    -loginName: string
+    -loginPassword: string
+    -loginResult: string
+    +submitLogin(): void
+    +showLoginError(message: string): void
+  }
+
+  class ColorPage {
+    -searchText: string
+    -newColor: string
+    -searchResult: string
+    -colorAddResult: string
+    -colorList: string[]
+    +submitSearch(): void
+    +submitAdd(): void
+    +logout(): void
+    +showSearchResults(colors: string[]): void
+  }
+}
+
+package "Browser Application" {
+  class ColorApp {
+    -userId: integer = 0
+    -firstName: string = ""
+    -lastName: string = ""
+    -urlBase: string
+    -extension: string = "php"
+    +doLogin(): void
+    +saveCookie(): void
+    +readCookie(): void
+    +doLogout(): void
+    +addColor(): void
+    +searchColor(): void
+  }
+}
+
+package "PHP API" {
+  class LoginApi <<procedural endpoint>> {
+    -inData: object
+    +getRequestInfo(): object
+    +authenticate(login: string, password: string): User
+    +returnWithInfo(firstName: string, lastName: string, id: integer): void
+    +returnWithError(error: string): void
+  }
+
+  class AddColorApi <<procedural endpoint>> {
+    -inData: object
+    -color: string
+    -userId: integer
+    +getRequestInfo(): object
+    +addColor(color: string, userId: integer): boolean
+    +returnWithError(error: string): void
+  }
+
+  class SearchColorsApi <<procedural endpoint>> {
+    -inData: object
+    -searchResults: string
+    -searchCount: integer
+    +getRequestInfo(): object
+    +searchColors(search: string, userId: integer): string[]
+    +returnWithInfo(searchResults: string): void
+    +returnWithError(error: string): void
+  }
+}
+
+package "Domain" {
+  class User {
+    +id: integer
+    +firstName: string
+    +lastName: string
+    +login: string
+    -password: string
+    +getFullName(): string
+  }
+
+  class Color {
+    +id: integer
+    +name: string
+    +userId: integer
+    +getName(): string
+  }
+}
+
+package "Persistence" <<conceptual>> {
+  class DatabaseConnection {
+    -host: string = "localhost"
+    -database: string = "COP4331"
+    +connect(): boolean
+    +prepare(sql: string): object
+    +close(): void
+    +getConnectionError(): string
+  }
+}
+
+LoginPage ..> ColorApp : calls doLogin()
+ColorPage ..> ColorApp : calls add/search/logout
+
+ColorApp ..> LoginApi : POST /Login.php
+ColorApp ..> AddColorApi : POST /AddColor.php
+ColorApp ..> SearchColorsApi : POST /SearchColors.php
+
+LoginApi ..> DatabaseConnection : queries
+AddColorApi ..> DatabaseConnection : inserts
+SearchColorsApi ..> DatabaseConnection : queries
+
+DatabaseConnection o-- User : loads/returns
+DatabaseConnection o-- Color : loads/creates
+
+User "1" -- "0..*" Color : owns
+
+note right of DatabaseConnection
+  The current PHP files duplicate
+  this connection setup and do not
+  implement a shared class.
+end note
+
+legend right
+  |= Element |= Meaning |
+  | Solid line | Domain association |
+  | Dashed arrow | Dependency or HTTP/JSON call |
+  | <<procedural endpoint>> | PHP script modeled as a class |
+endlegend
+
+@enduml

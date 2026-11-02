@@ -1,0 +1,54 @@
+@startuml COLORS_Application_Use_Case_Diagram
+left to right direction
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam actorStyle awesome
+
+skinparam usecase {
+  BackgroundColor #F8F9FA
+  BorderColor #343A40
+  ArrowColor #343A40
+}
+skinparam rectangle {
+  BackgroundColor #FFFFFF
+  BorderColor #343A40
+}
+
+title COLORS Application Use Case Diagram
+
+actor "Registered User" as User
+actor "MySQL Database" as Database
+
+rectangle "COLORS Web Application" {
+  usecase "Log In" as UC_Login
+  usecase "Log Out" as UC_Logout
+  usecase "View Color Page" as UC_View
+  usecase "Add Color" as UC_Add
+  usecase "Search Colors" as UC_Search
+  usecase "Validate Credentials" as UC_Validate
+  usecase "Maintain User Session" as UC_Session
+}
+
+User --> UC_Login
+User --> UC_Logout
+User --> UC_View
+User --> UC_Add
+User --> UC_Search
+
+UC_Validate --> Database
+UC_Add --> Database
+UC_Search --> Database
+
+UC_Login ..> UC_Validate : <<include>>
+UC_Login ..> UC_Session : <<include>>
+UC_View ..> UC_Session : <<include>>
+UC_Add ..> UC_View : <<include>>
+UC_Search ..> UC_View : <<include>>
+
+legend right
+  |= Relationship |= Meaning |
+  | Solid line | Actor association |
+  | Dashed arrow | Mandatory included behavior |
+endlegend
+
+@enduml

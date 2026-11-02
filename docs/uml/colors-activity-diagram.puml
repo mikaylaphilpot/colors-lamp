@@ -1,0 +1,141 @@
+@startuml COLORS_Application_Activity_Diagram
+skinparam shadowing false
+skinparam activity {
+  BackgroundColor #F8F9FA
+  BorderColor #343A40
+  ArrowColor #343A40
+}
+
+title COLORS Application Activity Diagram
+
+|Registered User|
+start
+:Open application;
+:Enter login name and password;
+:Submit Login;
+
+|Browser / JavaScript|
+:Reset in-memory user state;
+:Create login JSON request;
+:Send POST request to Login.php;
+
+|PHP API|
+:Read JSON login request;
+:Connect to MySQL database;
+:Prepare credential lookup;
+
+|MySQL Database|
+:Select matching row from Users
+by login and password;
+
+|PHP API|
+if (Valid credentials found?) then (yes)
+  :Return user ID,
+first name, and last name;
+else (no)
+  :Return id 0 and no-record error;
+endif
+
+|Browser / JavaScript|
+if (Valid user ID returned?) then (yes)
+  :Store user ID, first name, and last name;
+  :Save browser cookie for 20 minutes;
+  :Redirect to color.html;
+else (no)
+  :Display "User/Password combination incorrect";
+  stop
+endif
+
+:Read session cookie;
+if (Valid user ID in cookie?) then (yes)
+else (no)
+  :Redirect to index.html;
+  stop
+endif
+
+partition "Authenticated Color Page" {
+  |Browser / JavaScript|
+  :Display color-management page;
+
+  repeat
+    |Registered User|
+    :Choose an action;
+
+    |Browser / JavaScript|
+    if (Selected action?) then (Add Color)
+      |Registered User|
+      :Enter color name;
+      :Submit Add Color;
+
+      |Browser / JavaScript|
+      :Clear previous add-result message;
+      :Create add JSON request;
+      :Send POST request to AddColor.php;
+
+      |PHP API|
+      :Read color and user ID;
+      :Connect to MySQL database;
+      :Prepare color insert;
+
+      |MySQL Database|
+      :Insert color and user ID into Colors;
+
+      |PHP API|
+      if (Insert successful?) then (yes)
+        :Return empty error value;
+      else (no)
+        :Return database or connection error;
+      endif
+
+      |Browser / JavaScript|
+      if (Insert successful?) then (yes)
+        :Display "Color has been added";
+      else (no)
+        :Display returned error message;
+      endif
+    elseif (Search Colors) then
+      |Registered User|
+      :Enter search text;
+      :Submit Search Color;
+
+      |Browser / JavaScript|
+      :Clear previous search message and color list;
+      :Create search JSON request;
+      :Send POST request to SearchColors.php;
+
+      |PHP API|
+      :Read search text and user ID;
+      :Wrap search text with wildcards;
+      :Connect to MySQL database;
+      :Prepare color-name and user-ID lookup;
+
+      |MySQL Database|
+      :Select Names from Colors
+where Name matches search
+and UserID equals current user;
+
+      |PHP API|
+      if (Matching color records found?) then (yes)
+        :Return matching Names in results array;
+      else (no)
+        :Return "No Records Found" error;
+      endif
+
+      |Browser / JavaScript|
+      if (Matching records found?) then (yes)
+        :Display "Color(s) has been retrieved";
+        :Render each matching name on a separate line;
+      else (no)
+        :Display returned no-record message;
+      endif
+    else (Log Out)
+      :Reset user ID, first name, and last name;
+      :Expire the browser session cookie;
+      :Redirect to index.html;
+      stop
+    endif
+  repeat while (Continue on color page?) is (yes)
+}
+
+stop
+@enduml
