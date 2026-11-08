@@ -15,7 +15,8 @@ export default [
         prompt: "readonly",
         fetch: "readonly",
         localStorage: "readonly",
-        sessionStorage: "readonly"
+        sessionStorage: "readonly",
+        XMLHttpRequest: "readonly"
       }
     },
 
