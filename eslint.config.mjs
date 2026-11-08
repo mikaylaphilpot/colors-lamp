@@ -5,7 +5,7 @@ export default [
 
     languageOptions: {
       ecmaVersion: "latest",
-      sourceType: "module",
+      sourceType: "commonjs",
 
       globals: {
         window: "readonly",
@@ -16,7 +16,8 @@ export default [
         fetch: "readonly",
         localStorage: "readonly",
         sessionStorage: "readonly",
-        XMLHttpRequest: "readonly"
+        XMLHttpRequest: "readonly",
+        module: "readonly"
       }
     },
 
