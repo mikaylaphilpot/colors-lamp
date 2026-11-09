@@ -85,7 +85,7 @@ This project was developed with assistance from generative AI tools:
 
 **Tool**: GitHub Copilot
 
-**Date**: September 27, 2026
+**Date**: November 1, 2026
 
 **Scope**: Creation of activity, use case, and class diagrams using PlantUML (.puml) files.
 
