@@ -70,3 +70,27 @@ Ensure these files are uploaded to the /var/www/html/ directory of your LAMP dro
 
 # Assumptions
 I assumed the reader has some familiarity with basic Linux commands.
+
+# AI Assistance Disclosure
+
+This project was developed with assistance from generative AI tools:
+
+**Tool**: OpenAI ChatGPT (GPT-6)
+
+**Date**: November 8, 2026
+
+**Scope**: Guidance on configuring automated HTML, CSS, and JavaScript linting through GitHub Actions; troubleshooting ESLint configuration issues; understanding HTMLHint rules; and clarifying assignment submission requirements.
+
+**Nature of Use**: Provided explanations and example configurations for HTMLHint, Stylelint, and ESLint; assisted with GitHub Actions workflow setup; explained ESLint global-variable declarations and JavaScript module types; demonstrated proper HTML5 document structure; and generated initial version of README updates.
+
+**Tool**: GitHub Copilot
+
+**Date**: September 27, 2026
+
+**Scope**: Creation of activity, use case, and class diagrams using PlantUML (.puml) files.
+
+**Nature of Use**: Used Copilot to generate initial diagram files and assist with revisions. The generated diagrams were reviewed for accuracy, modified, and further refined with AI assistance where necessary to better represent the project's requirements and design.
+
+All AI-generated code was reviewed, tested, and modified to meet assignment requirements. Final implementation reflects my understanding of the concepts.
+
+
