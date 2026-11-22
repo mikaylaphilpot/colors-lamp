@@ -91,6 +91,14 @@ This project was developed with assistance from generative AI tools:
 
 **Nature of Use**: Used Copilot to generate initial diagram files and assist with revisions. The generated diagrams were reviewed for accuracy, modified, and further refined with AI assistance where necessary to better represent the project's requirements and design.
 
+**Tool**: GitHub Copilot
+
+**Date**: November 22, 2026
+
+**Scope**: Creation of frontend unit tests, integration tests, and github actions workflow.
+
+**Nature of Use**: Used Copilot to generate unit test, integration test, and a github actions workflow. I further refined the initial unit test suggested to ensure it was creating the unit test based off of existing frontend code, rather than adding new frontend code.
+
 All AI-generated code was reviewed, tested, and modified to meet assignment requirements. Final implementation reflects my understanding of the concepts.
 
 
